@@ -1,6 +1,7 @@
 package org.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class Product {
@@ -10,7 +11,7 @@ public class Product {
     private String marca;
 
     private BigDecimal prezzo;
-    private Integer iva;
+    private BigDecimal iva;
 
     //COSTRUTTORE
     public Product() {
@@ -24,7 +25,7 @@ public class Product {
         this.prezzo = prezzo;
     }
 
-    public Product(String nome, String marca, BigDecimal prezzo, Integer iva) {
+    public Product(String nome, String marca, BigDecimal prezzo, BigDecimal iva) {
         this.codice = randomNumber();
         this.nome = nome;
         this.marca = marca;
@@ -48,15 +49,14 @@ public class Product {
         return marca;
     }
 
-    public Integer getIva() {
+    public BigDecimal getIva() {
         return iva;
     }
 
     // ALTRI METODI GETTER
     public BigDecimal getPrezzoConIva() {
-        //iva al 22%
-        BigDecimal iva = new BigDecimal("1.22");
-        return prezzo.multiply(iva);
+        // price + price * vat
+        return prezzo.add(prezzo.multiply(iva)).setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public String getNomeConIva() {
@@ -80,7 +80,7 @@ public class Product {
         this.prezzo = prezzo;
     }
 
-    public void setIva(Integer iva) {
+    public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
 
@@ -92,7 +92,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "Prodotto{" +
                 "codice=" + codice +
                 ", nome='" + nome + '\'' +
                 ", marca='" + marca + '\'' +
